@@ -1,7 +1,7 @@
 # Note: You must restart bin/webpack-dev-server for changes to take effect
 
 default: &default
-  source_path: app/javascript
+  source_path: app/frontend
   source_entry_path: packs
   public_root_path: public
   public_output_path: packs
@@ -70,7 +70,6 @@ development:
       'Access-Control-Allow-Origin': '*'
     watch_options:
       ignored: '**/node_modules/**'
-
 
 test:
   <<: *default
