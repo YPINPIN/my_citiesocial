@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <meta name="turbolinks-cache-control" content="no-cache">
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
@@ -12,6 +13,8 @@
 
   <body>
     <%= render 'shared/frontend/navbar' %>
+    <%= render 'shared/frontend/top_menu' %>
     <%= yield %>
+    <%= render 'shared/frontend/footer' %>
   </body>
 </html>
