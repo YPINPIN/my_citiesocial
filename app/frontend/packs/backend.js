@@ -6,6 +6,10 @@ Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
 
+// enable action text
+require("trix")
+require("@rails/actiontext")
+
 import "controllers"
 
 import "scripts/shared"
