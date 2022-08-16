@@ -31,6 +31,7 @@ gem 'figaro', '~> 1.2'
 gem 'omniauth-rails_csrf_protection', '~> 1.0', '>= 1.0.1'
 gem 'paranoia', '~> 2.6'
 gem 'friendly_id', '~> 5.4', '>= 5.4.2'
+gem 'acts_as_list', '~> 1.0', '>= 1.0.4'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
