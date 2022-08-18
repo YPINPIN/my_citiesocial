@@ -30,8 +30,10 @@
         <div class="buttons">
           <% if user_signed_in? %>
             <div class="navbar-item" data-controller="cart">
-              <i class="fa-solid fa-cart-shopping"></i>
-              <span data-cart-target="count" data-action="addToCart@document->cart#updateCart">(<%= current_cart.items.count %>)</span>
+              <%= link_to cart_path do %>
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span data-cart-target="count" data-action="addToCart@document->cart#updateCart">(<%= current_cart.items.count %>)</span>
+              <% end %>
             </div>
 
             <div class="navbar-item has-dropdown is-hoverable">
