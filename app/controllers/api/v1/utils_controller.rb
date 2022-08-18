@@ -14,9 +14,8 @@ class Api::V1::UtilsController < ApplicationController
   def cart
     # 找到商品
     product = Product.friendly.find(params[:id])
-
     if product
-      current_cart.add_item(product.code)
+      current_cart.add_item(product.code, params[:quantity].to_i)
       session[:cart_9527] = current_cart.serialize
 
       render json: {status: 'ok', items: current_cart.items.count}
