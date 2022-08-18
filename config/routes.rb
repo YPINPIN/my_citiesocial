@@ -12,6 +12,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :orders, expect: [:new, :edit, :update, :destroy]
+
   namespace :admin do
     root 'products#index' # /admin
     resources :products
