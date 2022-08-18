@@ -5,7 +5,12 @@ Rails.application.routes.draw do
   resources :products, only: [:index, :show]
   resources :categories, only: [:show] # /categories/2
   
-  resource :cart, only: [:show, :destroy]
+  resource :cart, only: [:show, :destroy] do
+    collection do
+      # /cart/checkout
+      get :checkout
+    end
+  end
 
   namespace :admin do
     root 'products#index' # /admin
