@@ -19,7 +19,7 @@ export default class extends Controller {
       data.append("sku", sku);
 
       Rails.ajax({
-        url: '/api/v1/hello',
+        url: '/api/v1/cart',
         data,
         type: 'POST',
         success: (response) => {

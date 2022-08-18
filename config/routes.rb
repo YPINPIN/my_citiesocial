@@ -20,6 +20,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       # POST /api/v1/subscribe
       post 'subscribe', to: 'utils#subscribe'
+      # POST /api/v1/cart
+      post 'cart', to: 'utils#cart'
     end
   end
 
