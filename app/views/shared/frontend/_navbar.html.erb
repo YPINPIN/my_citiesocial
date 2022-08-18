@@ -29,6 +29,11 @@
       <div class="navbar-item">
         <div class="buttons">
           <% if user_signed_in? %>
+            <div class="navbar-item">
+              <i class="fa-solid fa-cart-shopping"></i>
+              (<%= current_cart.items.count %>)
+            </div>
+
             <div class="navbar-item has-dropdown is-hoverable">
               <a class="navbar-link">
                 <i class="fa-solid fa-user"></i>&nbsp;<%= current_user.email %>
