@@ -5,4 +5,8 @@ class OrderItem < ApplicationRecord
   def total_price
     quantity * sku.product.sell_price
   end
+
+  def product
+    sku.product
+  end
 end

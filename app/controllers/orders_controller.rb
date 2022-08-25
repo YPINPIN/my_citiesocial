@@ -103,6 +103,71 @@ class OrdersController < ApplicationController
     end
   end
 
+  def pay
+    @order = current_user.orders.find(params[:id])
+    uri = '/v3/payments/request'
+
+    products = []
+    @order.order_items.each do |item|
+      products.push(
+        {
+          name: item.product.name,
+          quantity: item.quantity,
+          price: item.product.sell_price.to_i
+        }
+      )
+    end
+
+    body = {
+      "amount": @order.total_price.to_i,
+      "currency": "TWD",
+      "orderId": @order.num,
+      "packages": [
+        {
+          "id": @order.num,
+          "amount": @order.total_price.to_i,
+          "products": products
+        }
+      ],
+      "redirectUrls": {
+        "confirmUrl": "http://localhost:3000/orders/#{@order.id}/pay_confirm",
+        "cancelUrl": "http://localhost:3000/orders/#{@order.id}/pay_cancel"
+      }
+    }
+
+    resp = post_resp(uri, body)
+
+    result = JSON.parse(resp.body)
+
+    if result['returnCode'] == "0000"
+      payment_url = result['info']['paymentUrl']['web']
+      redirect_to payment_url
+    else
+      redirect_to orders_path, notice: '付款發生錯誤'
+    end
+  end
+
+  def pay_confirm
+    @order = current_user.orders.find(params[:id])
+    uri = "/v3/payments/#{params[:transactionId]}/confirm"
+    body = {
+      "amount": @order.total_price.to_i,
+      "currency": "TWD",
+    }
+
+    resp = post_resp(uri, body)
+
+    result = JSON.parse(resp.body)
+
+    if result['returnCode'] == "0000"
+      transaction_id = result['info']['transactionId']
+      @order.pay!(transaction_id: transaction_id)
+      redirect_to orders_path, notice: '付款已完成'
+    else
+      redirect_to orders_path, notice: "付款發生錯誤：#{result['returnMessage']}"
+    end
+  end
+
   private
   def order_params
     params.require(:order).permit(:recipient, :tel, :address, :note)
