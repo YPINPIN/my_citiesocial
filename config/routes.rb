@@ -13,6 +13,10 @@ Rails.application.routes.draw do
   end
 
   resources :orders, expect: [:new, :edit, :update, :destroy] do
+    member do
+      delete :cancel # /orders/8/cancel
+    end
+    
     collection do
       get :confirm  # /orders/confirm
     end

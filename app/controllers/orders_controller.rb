@@ -81,6 +81,28 @@ class OrdersController < ApplicationController
     end
   end
 
+  def cancel
+    @order = current_user.orders.find(params[:id])
+
+    if @order.paid?
+      uri = "/v3/payments/#{@order.transaction_id}/refund"
+      body = {}
+
+      resp = post_resp(uri, body)
+      result = JSON.parse(resp.body)
+
+      if result['returnCode'] == "0000"
+        @order.cancel!
+        redirect_to orders_path, notice: "訂單 #{@order.num} 已取消，並完成退款!"
+      else
+        redirect_to orders_path, notice: "退款發生錯誤：#{result['returnMessage']}"
+      end
+    else
+      @order.cancel!
+      redirect_to orders_path, notice: "訂單 #{@order.num} 已取消!"
+    end
+  end
+
   private
   def order_params
     params.require(:order).permit(:recipient, :tel, :address, :note)

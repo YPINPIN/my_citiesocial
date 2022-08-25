@@ -26,7 +26,7 @@ class Order < ApplicationRecord
     end
 
     event :cancel do
-      transitions from: [:pending, :paid, :delivered], to: :cancel
+      transitions from: [:pending, :paid, :delivered], to: :canceled
     end
   end
 
