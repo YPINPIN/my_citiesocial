@@ -40,7 +40,7 @@ class OrdersController < ApplicationController
 
       signature = get_signature(secrect, uri, body, nonce)
 
-      resp = Faraday.post("#{ENV['line_pay_endpoint']}/v3/payments/request") do |req|
+      resp = Faraday.post("#{ENV['line_pay_endpoint']}#{uri}") do |req|
         req.headers['Content-Type'] = 'application/json'
         req.headers['X-LINE-ChannelId'] = ENV['line_pay_channel_id']
         req.headers['X-LINE-Authorization-Nonce'] = nonce
@@ -57,6 +57,37 @@ class OrdersController < ApplicationController
         redirect_to root_path, notice: '付款發生錯誤'
       end
       
+    end
+  end
+
+  def confirm
+    secrect = ENV['line_pay_channel_secret']
+    nonce = SecureRandom.uuid
+    uri = "/v3/payments/#{params[:transactionId]}/confirm"
+    body = {
+      "amount": current_cart.total_price.to_i,
+      "currency": "TWD",
+    }
+
+    signature = get_signature(secrect, uri, body, nonce)
+
+    resp = Faraday.post("#{ENV['line_pay_endpoint']}#{uri}") do |req|
+      req.headers['Content-Type'] = 'application/json'
+      req.headers['X-LINE-ChannelId'] = ENV['line_pay_channel_id']
+      req.headers['X-LINE-Authorization-Nonce'] = nonce
+      req.headers['X-LINE-Authorization'] = signature
+      req.body = body.to_json
+    end
+    p resp
+
+    result = JSON.parse(resp.body)
+
+    if result['returnCode'] == "0000"
+      # 1. 變更 order狀態
+      # 2. 清空購物車
+      redirect_to root_path, notice: '付款已完成'
+    else
+      redirect_to root_path, notice: "付款發生錯誤：#{result['returnMessage']}"
     end
   end
 

@@ -12,7 +12,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :orders, expect: [:new, :edit, :update, :destroy]
+  resources :orders, expect: [:new, :edit, :update, :destroy] do
+    collection do
+      get :confirm  # /orders/confirm
+    end
+  end
 
   namespace :admin do
     root 'products#index' # /admin
