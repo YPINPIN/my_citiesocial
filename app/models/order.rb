@@ -4,7 +4,7 @@ class Order < ApplicationRecord
 
   validates :recipient, :tel, :address, presence: true
 
-  before_action :generate_order_num
+  before_create :generate_order_num
 
   private
   def generate_order_num
